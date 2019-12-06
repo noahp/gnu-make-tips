@@ -161,6 +161,16 @@ name: 8--phony
 
 
 ---
+name: implicit-rules
+
+# X. Implicit rules
+
+Yr minimal makefile to build a c program:
+```makefile
+test: test.o
+```
+
+---
 name: reference
 
 # References
