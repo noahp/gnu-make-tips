@@ -8,6 +8,8 @@ class: left, middle
 4. [Conditionals](#4--conditionals)
 5. [Targets and Rules](#5--targets-and-rules)
 6. [Functions](#6--functions)
+7. [Sub-make](#7--sub-make)
+8. [Phony targets](#8--phony)
 100. [References](#reference)
 
 <a class="github-fork-ribbon" href="https://github.com/noahp/gnu-make-tips" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
@@ -34,6 +36,12 @@ https://www.gnu.org/software/make/manual/html_node/index.html
 name: 2--anatomy
 
 # 2. 🧩 Anatomy of a Makefile
+
+`make` will load a file named `Makefile` from the current directory:
+> *the default is to try `GNUmakefile`, `makefile`, and `Makefile`, in that
+> order*
+
+You can specify another file with the `-f/--file` arg: `make -f foo.mk`
 
 ```makefile
 # Comments are prefixed with the '#' symbol
@@ -114,12 +122,43 @@ name: 4--conditionals
 ---
 name: 5--targets-and-rules
 
-# 5. Targets and Rules
+# 5. Targets and Prerequisites and Rules
 
 ---
 name: 6--functions
 
 # 6. Functions
+
+
+---
+name: 7--sub-make
+
+# 7. Sub-make
+
+Invoking Make from a Makefile should be done with the `$(MAKE)` variable:
+
+```makefile
+somelib.a:
+	$(MAKE) -C path/to/somelib/directory
+```
+
+This is often used when building external libraries.
+
+It's also used heavily in Kconfig builds.
+
+Note that this approach has some pitfalls<sup>[0]</sup>:
+
+- recusive invocation can result in slow builds
+- tracking prerequisites can be tricky; often you will see `.PHONY` used
+
+<br/>
+[0] - http://aegis.sourceforge.net/auug97.pdf
+
+---
+name: 8--phony
+
+# 8. Phony targets
+
 
 ---
 name: reference
