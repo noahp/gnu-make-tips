@@ -5,6 +5,10 @@ class: left, middle
 1. [GNU Make](#1--make)
 2. [Anatomy of a Makefile](#2--anatomy)
 3. [Variables](#3--variables)
+4. [Conditionals](#4--conditionals)
+5. [Targets and Rules](#5--targets-and-rules)
+6. [Functions](#6--functions)
+100. [References](#reference)
 
 <a class="github-fork-ribbon" href="https://github.com/noahp/gnu-make-tips" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 
@@ -43,7 +47,7 @@ test.txt:
 ```
 
 ---
-name: 2--variables
+name: 3--variables
 
 # 3. Variables
 
@@ -116,7 +120,6 @@ name: 5--targets-and-rules
 name: 6--functions
 
 # 6. Functions
-
 
 ---
 name: reference
