@@ -2,20 +2,26 @@ class: left, middle
 
 # GNU Make Tips
 
-1. [GNU Make](#1--make)
-2. [Anatomy of a Makefile](#2--anatomy)
-3. [Variables](#3--variables)
-4. [Conditionals](#4--conditionals)
-5. [Targets and Rules](#5--targets-and-rules)
-6. [Functions](#6--functions)
-7. [Sub-make](#7--sub-make)
-8. [Phony targets](#8--phony)
-100. [References](#reference)
+- [GNU Make Tips](#GNU-Make-Tips)
+- [1. GNU Make](#1-GNU-Make)
+- [2. Invoking Make](#2-Invoking-Make)
+- [3. 🧩 Anatomy of a Makefile](#3-%F0%9F%A7%A9-Anatomy-of-a-Makefile)
+- [4. Variables](#4-Variables)
+	- [4.1 Environment variables](#41-Environment-variables)
+	- [4.2 Overriding variables](#42-Overriding-variables)
+	- [4.3 Target-specific variables](#43-Target-specific-variables)
+- [5. Conditionals](#5-Conditionals)
+- [6. Targets (Goals) and Prerequisites and Rules](#6-Targets-Goals-and-Prerequisites-and-Rules)
+- [7. Functions](#7-Functions)
+- [8. Sub-make](#8-Sub-make)
+- [9. Phony targets](#9-Phony-targets)
+- [X. Implicit rules](#X-Implicit-rules)
+- [References](#References)
 
 <a class="github-fork-ribbon" href="https://github.com/noahp/gnu-make-tips" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 
 ---
-name: 1--make
+name: 1-GNU-Make
 
 # 1. GNU Make
 
@@ -33,15 +39,39 @@ The GNU Make manual is very good:
 https://www.gnu.org/software/make/manual/html_node/index.html
 
 ---
-name: 2--anatomy
+name: 2-Invoking-Make
 
-# 2. 🧩 Anatomy of a Makefile
+# 2. Invoking Make
 
-`make` will load a file named `Makefile` from the current directory:
-> *the default is to try `GNUmakefile`, `makefile`, and `Makefile`, in that
-> order*
+- Running `make` will load a file named `Makefile` from the current directory,
+  and attempt to update the default **goal** (more on goals later).
+  > *the default is to try `GNUmakefile`, `makefile`, and `Makefile`, in that
+  > order*
 
-You can specify another file with the `-f/--file` arg: `make -f foo.mk`
+- You can specify another file with the `-f/--file` arg: `make -f foo.mk`
+
+- You can specify any number of *goals* by listing them as positional arguments:
+
+  ```bash
+  # typical goals
+  make clean all
+  ```
+
+- You can run make in another directory with the `-C` arg:
+
+  ```bash
+  make -C some/sub/directory
+  ```
+
+  Make will run as if it first `cd`'d to that directory.
+
+  *Fun fact- `git` also can be run with `-C` for the same effect!*
+
+---
+name: 3-%F0%9F%A7%A9-Anatomy-of-a-Makefile
+
+# 3. 🧩 Anatomy of a Makefile
+
 
 ```makefile
 # Comments are prefixed with the '#' symbol
@@ -55,9 +85,9 @@ test.txt:
 ```
 
 ---
-name: 3--variables
+name: 4-Variables
 
-# 3. Variables
+# 4. Variables
 
 Variables that are not set will evaluate to an empty string.
 
@@ -83,7 +113,10 @@ Variable assignment comes in 2 **flavors**:
  # prints BAR=foo=1
  ```
 
-## 3.1 Environment variables
+---
+name: 41-Environment-variables
+
+## 4.1 Environment variables
 
 ```makefile
 # all environment variables are available
@@ -97,8 +130,9 @@ make: *** No targets.  Stop.
 ```
 
 ---
+name: 42-Overriding-variables
 
-## 3.2 Overriding variables
+## 4.2 Overriding variables
 
 ```makefile
 # the value passed in the make command will override
@@ -115,25 +149,30 @@ make: *** No targets.  Stop.
 ```
 
 ---
-name: 4--conditionals
+name: 43-Target-specific-variables
 
-# 4. Conditionals
-
----
-name: 5--targets-and-rules
-
-# 5. Targets and Prerequisites and Rules
+## 4.3 Target-specific variables
 
 ---
-name: 6--functions
+name: 5-Conditionals
 
-# 6. Functions
+# 5. Conditionals
+
+---
+name: 6-Targets-Goals-and-Prerequisites-and-Rules
+
+# 6. Targets (Goals) and Prerequisites and Rules
+
+---
+name: 7-Functions
+
+# 7. Functions
 
 
 ---
-name: 7--sub-make
+name: 8-Sub-make
 
-# 7. Sub-make
+# 8. Sub-make
 
 Invoking Make from a Makefile should be done with the `$(MAKE)` variable:
 
@@ -155,13 +194,13 @@ Note that this approach has some pitfalls<sup>[0]</sup>:
 [0] - http://aegis.sourceforge.net/auug97.pdf
 
 ---
-name: 8--phony
+name: 9-Phony-targets
 
-# 8. Phony targets
+# 9. Phony targets
 
 
 ---
-name: implicit-rules
+name: X-Implicit-rules
 
 # X. Implicit rules
 
@@ -171,7 +210,7 @@ test: test.o
 ```
 
 ---
-name: reference
+name: References
 
 # References
 
