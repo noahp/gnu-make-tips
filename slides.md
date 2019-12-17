@@ -2,26 +2,27 @@ class: left, middle
 
 # GNU Make Tips
 
-- [GNU Make Tips](#GNU-Make-Tips)
-- [1. GNU Make](#1-GNU-Make)
-- [2. Invoking Make](#2-Invoking-Make)
-- [3. 🧩 Anatomy of a Makefile](#3-%F0%9F%A7%A9-Anatomy-of-a-Makefile)
-- [4. Variables](#4-Variables)
-	- [4.1 Environment variables](#41-Environment-variables)
-	- [4.2 Overriding variables](#42-Overriding-variables)
-	- [4.3 Target-specific variables](#43-Target-specific-variables)
-- [5. Conditionals](#5-Conditionals)
-- [6. Targets (Goals) and Prerequisites and Rules](#6-Targets-Goals-and-Prerequisites-and-Rules)
-- [7. Functions](#7-Functions)
-- [8. Sub-make](#8-Sub-make)
-- [9. Phony targets](#9-Phony-targets)
-- [X. Implicit rules](#X-Implicit-rules)
-- [References](#References)
+- [GNU Make Tips](#gnu-make-tips)
+- [1. GNU Make](#1-gnu-make)
+- [2. Invoking Make](#2-invoking-make)
+- [3. 🧩 Anatomy of a Makefile](#3-%f0%9f%a7%a9-anatomy-of-a-makefile)
+- [4. Variables](#4-variables)
+  - [4.1 Environment variables](#41-environment-variables)
+  - [4.2 Overriding variables](#42-overriding-variables)
+  - [4.3 Target-specific variables](#43-target-specific-variables)
+- [5. Conditionals](#5-conditionals)
+- [6. Targets (Goals) and Prerequisites and Rules](#6-targets-goals-and-prerequisites-and-rules)
+- [7. Functions](#7-functions)
+- [8. Sub-make](#8-sub-make)
+- [9. Phony targets](#9-phony-targets)
+- [10. Implicit rules](#10-implicit-rules)
+- [11. Metaprogramming](#11-metaprogramming)
+- [References](#references)
 
 <a class="github-fork-ribbon" href="https://github.com/noahp/gnu-make-tips" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 
 ---
-name: 1-GNU-Make
+name: 1-gnu-make
 
 # 1. GNU Make
 
@@ -38,8 +39,11 @@ produce "targets".
 The GNU Make manual is very good:
 https://www.gnu.org/software/make/manual/html_node/index.html
 
+When searching for help on Make, using `gnu make xxx` as the search can be
+helpful.
+
 ---
-name: 2-Invoking-Make
+name: 2-invoking-make
 
 # 2. Invoking Make
 
@@ -68,7 +72,7 @@ name: 2-Invoking-Make
   *Fun fact- `git` also can be run with `-C` for the same effect!*
 
 ---
-name: 3-%F0%9F%A7%A9-Anatomy-of-a-Makefile
+name: 3-%f0%9f%a7%a9-anatomy-of-a-makefile
 
 # 3. 🧩 Anatomy of a Makefile
 
@@ -85,7 +89,7 @@ test.txt:
 ```
 
 ---
-name: 4-Variables
+name: 4-variables
 
 # 4. Variables
 
@@ -114,7 +118,7 @@ Variable assignment comes in 2 **flavors**:
  ```
 
 ---
-name: 41-Environment-variables
+name: 41-environment-variables
 
 ## 4.1 Environment variables
 
@@ -130,7 +134,7 @@ make: *** No targets.  Stop.
 ```
 
 ---
-name: 42-Overriding-variables
+name: 42-overriding-variables
 
 ## 4.2 Overriding variables
 
@@ -149,28 +153,28 @@ make: *** No targets.  Stop.
 ```
 
 ---
-name: 43-Target-specific-variables
+name: 43-target-specific-variables
 
 ## 4.3 Target-specific variables
 
 ---
-name: 5-Conditionals
+name: 5-conditionals
 
 # 5. Conditionals
 
 ---
-name: 6-Targets-Goals-and-Prerequisites-and-Rules
+name: 6-targets-goals-and-prerequisites-and-rules
 
 # 6. Targets (Goals) and Prerequisites and Rules
 
 ---
-name: 7-Functions
+name: 7-functions
 
 # 7. Functions
 
 
 ---
-name: 8-Sub-make
+name: 8-sub-make
 
 # 8. Sub-make
 
@@ -194,15 +198,15 @@ Note that this approach has some pitfalls<sup>[0]</sup>:
 [0] - http://aegis.sourceforge.net/auug97.pdf
 
 ---
-name: 9-Phony-targets
+name: 9-phony-targets
 
 # 9. Phony targets
 
 
 ---
-name: X-Implicit-rules
+name: 10-implicit-rules
 
-# X. Implicit rules
+# 10. Implicit rules
 
 Yr minimal makefile to build a c program:
 ```makefile
@@ -210,7 +214,46 @@ test: test.o
 ```
 
 ---
-name: References
+name: 11-metaprogramming
+
+# 11. Metaprogramming
+
+`Make`'s `eval` directive allows us to generate Make syntax at runtime:
+
+```makefile
+# generate rules for xml->json in some weird world
+FILES = $(wildcard inputfile/*.xml)
+
+# create a user-defined function that generates rules
+define GENERATE_RULE =
+$(eval
+# prereq rule for creating output directory
+$(1)_OUT_DIR = $(dir $(1))/$(1)_out
+$(1)_OUT_DIR:
+	mkdir -p $@
+
+# rule that calls a script on the input file and produces $@ target
+$(1)_OUT_DIR/$(1).json: $(1) | $(1)_OUT_DIR
+	./convert-xml-to-json.sh $(1) $@
+)
+
+# add the target to the all rule
+all: $(1)_OUT_DIR/$(1).json
+endef
+```
+
+---
+
+```makefile
+# produce the rules
+.PHONY: all
+all:
+
+$(foreach file,$(FILES),$(call GENERATE_RULE,$(file)))
+```
+
+---
+name: references
 
 # References
 
