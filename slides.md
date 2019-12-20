@@ -162,6 +162,29 @@ name: 5-conditionals
 
 # 5. Conditionals
 
+```makefile
+FOO=yolo
+ifeq ($(FOO),yolo)
+$(info foo is yolo!)
+else
+$(info foo is not yolo :( )
+endif
+
+# testing if a variable is set; unset variables are empty
+ifneq ($(FOO),)  # checking if FOO is blank
+$(info FOO is unset)
+endif
+
+# "complex conditional"
+ifeq ($(FOO),yolo)
+$(info foo is yolo)
+else ifeq ($(FOO), heyo)
+$(info foo is heyo)
+else
+$(info foo is not yolo or heyo :( )
+endif
+```
+
 ---
 name: 6-targets-goals-and-prerequisites-and-rules
 
