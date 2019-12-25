@@ -319,7 +319,14 @@ name: references
 
 # References
 
-- Useful tutorial
- http://maemo.org/maemo_training_material/maemo4.x/html/maemo_Application_Development_Chinook/Chapter_02_GNU_Make_and_makefiles.html
-- Nice pictures
- https://www.jfranken.de/homepages/johannes/vortraege/make.en.html
+- Good detailed dive into less common topics (shout out on `remake`):<br/>
+https://blog.jgc.org/2013/02/updated-list-of-my-gnu-make-articles.html
+
+- Mix of very exotic and simpler material:<br/>
+https://tech.davis-hansson.com/p/make/
+
+- Useful tutorial:<br/>
+http://maemo.org/maemo_training_material/maemo4.x/html/maemo_Application_Development_Chinook/Chapter_02_GNU_Make_and_makefiles.html
+
+- Nice pictures:<br/>
+https://www.jfranken.de/homepages/johannes/vortraege/make.en.html
