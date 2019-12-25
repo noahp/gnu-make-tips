@@ -10,6 +10,7 @@ class: left, middle
   - [4.1 Environment variables](#41-environment-variables)
   - [4.2 Overriding variables](#42-overriding-variables)
   - [4.3 Target-specific variables](#43-target-specific-variables)
+  - [4.4 Automatic variables](#44-automatic-variables)
 - [5. Conditionals](#5-conditionals)
 - [6. Targets (Goals) and Prerequisites and Rules](#6-targets-goals-and-prerequisites-and-rules)
 - [7. Functions](#7-functions)
@@ -54,7 +55,7 @@ name: 2-invoking-make
 
 - You can specify another file with the `-f/--file` arg: `make -f foo.mk`
 
-- You can specify any number of *goals* by listing them as positional arguments:
+- You can set any number of *goals* by listing them as positional arguments:
 
   ```bash
   # typical goals
@@ -80,11 +81,13 @@ name: 3-%f0%9f%a7%a9-anatomy-of-a-makefile
 ```makefile
 # Comments are prefixed with the '#' symbol
 
-# A make variable "FOO" assignment
+# A variable assignment
 FOO = "hello there!"
 
-# A rule creating "test.txt" using the $(FOO) variable
-test.txt:
+# A rule creating target "test.txt"
+test.txt: source.txt  # source.txt is a "prerequisite" for test.txt
+	# the contents of a rule is called the "recipe", and is
+	# typically composed of one or more shell commands
 	echo $(FOO) > test.txt
 ```
 
@@ -156,6 +159,42 @@ make: *** No targets.  Stop.
 name: 43-target-specific-variables
 
 ## 4.3 Target-specific variables
+
+These variables are only available in the recipe context.
+
+They also apply to any prerequisite recipe!
+
+```makefile
+# set the -g value to CFLAGS
+# applies to the prog.o/foo.o/bar.o recipes too!
+prog : CFLAGS = -g
+prog : prog.o foo.o bar.o
+	echo $(CFLAGS) # will print '-g'
+```
+
+---
+name: 44-automatic-variables
+
+## 4.4 Automatic variables
+
+Special variables always set by make, available in recipe context.
+
+They can be useful to prevent duplicated names (Don't Repeat Yourself).
+
+A few common ones:
+
+```makefile
+# $@ : the target name, here it would be "test.txt"
+test.txt:
+	echo HEYO > $@
+
+# $^ : name of all the prerequisites
+all.zip: foo.txt test.txt
+	gzip -c $^ > $@
+```
+
+See more at:
+https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
 
 ---
 name: 5-conditionals
